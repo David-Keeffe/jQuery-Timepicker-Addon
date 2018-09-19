@@ -1246,7 +1246,7 @@
 							case 'c':
 								return '(\\d?\\d?\\d)';
 							case 'z':
-								return '(z|[-+]\\d\\d:?\\d\\d|\\S+)?';
+								return '(z|[-+]\\d\\d(:?\\d\\d)?|\\S+)?';
 							case 't':
 								return getPatternAmpm(o.amNames, o.pmNames);
 							default:    // literal escaped in quotes
@@ -2089,6 +2089,10 @@
 		if (normalized.toUpperCase() === 'Z') { // if iso8601 with Z, its 0 minute offset
 			return 0;
 		}
+		
+		if (/^(\-|\+)\d{2}$/.test(normalized)) { 
+                    normalized += "00"; // hours-only string - add the minutes
+                }
 
 		if (!/^(\-|\+)\d{4}$/.test(normalized)) { // possibly a user defined tz, so just give it back
 			return parseInt(tzString, 10);
